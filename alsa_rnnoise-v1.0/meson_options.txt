@@ -1,0 +1,15 @@
+option('plugin_dir',
+	type: 'string',
+	description: 'ALSA plugin directory location',
+	value: ''
+)
+option('config_dir',
+	type: 'string',
+	description: 'ALSA plugin pcm config location',
+	value: ''
+)
+option('static_rnnoise',
+	type: 'boolean',
+	description: 'Whether to static link RNNoise',
+	value: true
+)

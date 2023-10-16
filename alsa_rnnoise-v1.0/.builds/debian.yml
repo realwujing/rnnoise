@@ -1,0 +1,37 @@
+image: debian/stable
+packages:
+  - meson
+  - libasound2-dev
+  - build-essential
+  - autoconf
+  - libtool
+  - automake
+  - pkg-config
+  - python3-pip
+sources:
+  - https://git.sr.ht/~arsen/alsa_rnnoise
+  - https://gitlab.xiph.org/xiph/rnnoise.git
+tasks:
+  - manual_deps: |
+      pip3 install -U --user meson
+      cd rnnoise
+      ./autogen.sh
+      ./configure --disable-examples --disable-doc --prefix="$HOME/pfx"
+      make install
+  - setup: |
+      export PATH="$HOME/.local/bin:$PATH"
+      export PKG_CONFIG_PATH="$HOME/pfx/lib/pkgconfig/"
+      cd alsa_rnnoise
+      meson build
+  - build: |
+      export PATH="$HOME/.local/bin:$PATH"
+      cd alsa_rnnoise
+      ninja -C build
+artifacts:
+  - alsa_rnnoise/build/libasound_module_pcm_rnnoise.so
+triggers:
+  - action: email
+    condition: failure
+    to: arsen@aarsen.me
+
+# vim: sw=4 :
